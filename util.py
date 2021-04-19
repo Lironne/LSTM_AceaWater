@@ -33,5 +33,6 @@ def load_data():
         data[water_type][water_name] = pd.read_csv(data_set)
     
     return data 
+
     
 
