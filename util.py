@@ -51,7 +51,7 @@ def load_data():
         water_type = ''
         water_name = ''
 
-        if(len(name) == 2):
+        if(len(name) == 3):
             water_type = name[0]
             water_name = name[1]
         else:
@@ -65,20 +65,23 @@ def load_data():
 
     return data 
 
+def drop_cols(data, water_type, water_name):
+
+    print(water_type, water_name)
+
+    return data
 
 def process_data(data):
 
     for water_type in data:
         for water_name in data[water_type]:
-            
+
             dataset = data[water_type][water_name]
             values = dataset.values
             values = values.astype('float32')
             scaler = MinMaxScaler(feature_range=(0, 1))
             scaled = scaler.fit_transform(values)
             reframed = series_to_supervised(scaled, 1, 1)
-            print(reframed.head())
+            data[water_type][water_name] = drop_cols(reframed, water_type, water_name)
 
     return data
-
-
