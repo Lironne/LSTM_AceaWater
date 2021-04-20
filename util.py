@@ -67,15 +67,36 @@ def load_data():
 
 def drop_cols(data, water_type, water_name):
 
-    print(water_type, water_name)
+    dataset = pd.DataFrame(data)
 
-    return data
+    if water_type == 'Aquifer':
+        if water_name == 'Auser':
+            dataset.drop(dataset.columns[[26,27,28,29,30,31,32,33,34,35,38,40,41,42,43,44,45,46,47,48,49,50,51]], axis =1, inplace=True)
+        elif water_name == 'Doganella':
+            dataset.drop(dataset.columns[[21,22,32,33,34,35,36,37,38,39,40,41]], axis =1, inplace=True)
+        elif water_name == 'Luco':
+            dataset.drop(dataset.columns[[21,22,23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41]], axis =1, inplace=True)
+        else:
+            dataset.drop(dataset.columns[[7,10,11,12,13]], axis =1, inplace=True)
+    elif water_type == 'Lake':
+        dataset.drop(dataset.columns[[8,9,10,11,12,13]], axis =1, inplace=True)
+    elif water_type == 'River':
+        dataset.drop(dataset.columns[[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]], axis =1, inplace=True)
+    else :
+        if water_name == 'Amiata':
+            dataset.drop(dataset.columns[[15,16,17,18,19,20,21,22,23,24,25]], axis =1, inplace=True)
+        elif water_name == 'Lupa':
+            dataset.drop(dataset.columns[[2]], axis =1, inplace=True)
+        else:
+            dataset.drop(dataset.columns[[3,4]], axis=1, inplace=True)
+
+    return dataset
 
 def process_data(data):
 
     for water_type in data:
         for water_name in data[water_type]:
-
+            
             dataset = data[water_type][water_name]
             values = dataset.values
             values = values.astype('float32')
