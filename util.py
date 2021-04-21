@@ -62,6 +62,7 @@ def load_data():
             data[water_type] = {}
         
         data[water_type][water_name] = pd.read_csv(data_set, parse_dates = ['Date'], index_col=0, date_parser=parse)
+        
 
     return data 
 
@@ -96,7 +97,9 @@ def process_data(data):
 
     for water_type in data:
         for water_name in data[water_type]:
-            
+
+            date_indices = data[water_type][water_name].index
+            date_indices = date_indices.delete(date_indices.size - 1)
             dataset = data[water_type][water_name]
             values = dataset.values
             values = values.astype('float32')
@@ -104,5 +107,21 @@ def process_data(data):
             scaled = scaler.fit_transform(values)
             reframed = series_to_supervised(scaled, 1, 1)
             data[water_type][water_name] = drop_cols(reframed, water_type, water_name)
+            data[water_type][water_name].index = date_indices
 
     return data
+
+def get_split_date(index):
+
+    start_date = index[0]
+    end_date = index[index.size - 1]
+
+    if index.size < 365:
+        return round(index.size * 0.8) 
+
+    df = pd.DataFrame({'year': [end_date.year - 1], 'month': [start_date.month], 'day': [start_date.day]})
+    split_date = pd.to_datetime(df)
+
+    split_idx = index.get_loc(split_date[0])
+
+    return split_idx
