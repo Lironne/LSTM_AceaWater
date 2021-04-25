@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 	
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from sklearn.preprocessing import MinMaxScaler
 
 dirname = os.path.dirname(__file__)
@@ -117,11 +118,21 @@ def get_split_date(index):
     end_date = index[index.size - 1]
 
     if index.size < 365:
-        return round(index.size * 0.8) 
+        return (round(index.size * 0.7) ,round(index.size * 0.85))
 
-    df = pd.DataFrame({'year': [end_date.year - 1], 'month': [start_date.month], 'day': [start_date.day]})
+    if index.size < 365 * 3:
+        split_date_test = end_date + relativedelta(months=-6)
+        split_date_val = end_date + relativedelta(years=-1)
+
+        split_idx_test = index.get_loc(split_date_test, method='nearest')
+        split_idx_val = index.get_loc(split_date_val, method='nearest')
+
+        return (split_idx_val,split_idx_test) 
+    
+    df = pd.DataFrame({'year': [end_date.year - 1, end_date.year - 2], 'month': [start_date.month, start_date.month], 'day': [start_date.day, start_date.day]})
     split_date = pd.to_datetime(df)
 
-    split_idx = index.get_loc(split_date[0])
+    split_idx_test = index.get_loc(split_date[0])
+    split_idx_val = index.get_loc(split_date[1])
 
-    return split_idx
+    return (split_idx_val,split_idx_test)
