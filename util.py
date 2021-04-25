@@ -136,3 +136,10 @@ def get_split_date(index):
     split_idx_val = index.get_loc(split_date[1])
 
     return (split_idx_val,split_idx_test)
+
+
+def get_output_dim(columns):
+
+    output_vars = columns[columns.str.contains('(t)', regex=False)]
+
+    return output_vars.size * -1

@@ -13,9 +13,10 @@ def split_data(data):
     val = values[split_date_val:split_date_test,:]
     test = values[split_date_test:, :]
     # split into input and outputs
-    train_X, train_y = train[:, :-1], train[:, -1]
-    val_X, val_y = val[:,:-1], val[:,-1]
-    test_X, test_y = test[:, :-1], test[:, -1]
+    output_dim = util.get_output_dim(data.columns)
+    train_X, train_y = train[:, :output_dim], train[:, output_dim:]
+    val_X, val_y = val[:,:output_dim], val[:,output_dim:]
+    test_X, test_y = test[:, :output_dim], test[:, output_dim:]
     # reshape input to be 3D [samples, timesteps, features]
     train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
     val_X = val_X.reshape((val_X.shape[0], 1, val_X.shape[1]))
