@@ -94,24 +94,6 @@ def drop_cols(data, water_type, water_name):
 
     return dataset
 
-def process_data(data):
-
-    for water_type in data:
-        for water_name in data[water_type]:
-
-            date_indices = data[water_type][water_name].index
-            date_indices = date_indices.delete(date_indices.size - 1)
-            dataset = data[water_type][water_name]
-            values = dataset.values
-            values = values.astype('float32')
-            scaler = MinMaxScaler(feature_range=(0, 1))
-            scaled = scaler.fit_transform(values)
-            reframed = series_to_supervised(scaled, 1, 1)
-            data[water_type][water_name] = drop_cols(reframed, water_type, water_name)
-            data[water_type][water_name].index = date_indices
-
-    return data
-
 def get_split_date(index):
 
     start_date = index[0]
