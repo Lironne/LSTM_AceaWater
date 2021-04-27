@@ -125,3 +125,26 @@ def get_output_dim(columns):
     output_vars = columns[columns.str.contains('(t)', regex=False)]
 
     return output_vars.size * -1
+
+def get_features_cols(water_type, water_name):
+
+    if water_type == 'Aquifer':
+        if water_name == 'Auser':
+            return [0,1,2,3,4,5,6,7,8,9,12,14,15,16,17,18,19,20,21,22,23,24]
+        elif water_name == 'Doganella':
+            return [0,1,11,12,13,14,15,16,17,18,19,20]
+        elif water_name == 'Luco':
+            return [0,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19,20]
+        else:
+            return [0,3,4,5,6]
+    elif water_type == 'Lake':
+        return [0,1,2,3,4,5]
+    elif water_type == 'River':
+        return [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+    else :
+        if water_name == 'Amiata':
+            return [0,1,2,3,4,5,6,7,8,9,10]
+        elif water_name == 'Lupa':
+            return [0]
+        else:
+            return [0,1] 
